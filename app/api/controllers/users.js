@@ -156,6 +156,47 @@ const retrieveById = async (req, res, next) => {
 		});
 	}
 };
+const deleteById = async (req, res, next) => {
+	const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+	if (!errors.isEmpty()) {
+		res.status(422).json({ errors: errors.array() });
+		return;
+	}
+	let id = req.body.id;
+	let objectId = mongoose.Types.ObjectId(id);
+	let isActive = req.body.isActive;
+	let updatedEntry = {
+		isActive
+	};
+	try {
+		await userModel.findByIdAndUpdate(objectId, updatedEntry, function(err, userInfo) {
+			console.log(userInfo);
+			if (err) {
+				next(err);
+			} else {
+				if (userInfo == null) {
+					res.json({
+						status: 'failure',
+						message: 'No user present of the given id!!!',
+						data: null
+					});
+				} else {
+					res.json({
+						status: 'success',
+						message: 'User marked delete successfull!!!',
+						data: userInfo
+					});
+				}
+			}
+		});
+	} catch (error) {
+		res.json({
+			status: 'failure',
+			message: "Couldn't delete the data . Something is wrong",
+			data: null
+		});
+	}
+};
 const validate = (method) => {
 	switch (method) {
 		case 'createUser': {
@@ -173,6 +214,9 @@ const validate = (method) => {
 				body('lastName', 'No lastName Found').exists()
 			];
 		}
+		case 'deleteUser': {
+			return [ body('id', 'No id found').exists(), body('isActive', ' No isActive field present').exists() ];
+		}
 	}
 };
-export { create, validate, retrieve, retrieveById, updateById };
+export { create, validate, retrieve, retrieveById, updateById, deleteById };
