@@ -1,6 +1,7 @@
 import userModel from '../models/users.js';
 import { body } from 'express-validator';
 import checkAPIs from 'express-validator';
+import mongoose from 'mongoose';
 const { validationResult } = checkAPIs;
 const create = (req, res, next) => {
 	try {
@@ -57,6 +58,38 @@ const retrieve = async (req, res, next) => {
 		});
 	}
 };
+const retrieveById = async (req, res, next) => {
+	let id = req.params.id;
+	console.log(id);
+	try {
+		var objectId = mongoose.Types.ObjectId(id);
+		await userModel.findById(objectId, function(err, userInfo) {
+			if (err) {
+				next(err);
+			} else {
+				if (userInfo === null) {
+					res.json({
+						status: 'success',
+						message: 'No user present of the given id!!!',
+						data: null
+					});
+				} else {
+					res.json({
+						status: 'success',
+						message: 'User present !!!',
+						data: userInfo
+					});
+				}
+			}
+		});
+	} catch (error) {
+		res.json({
+			status: 'failure',
+			message: "Couldn't Retrieve the data. Please check your id once again",
+			data: null
+		});
+	}
+};
 const validate = (method) => {
 	switch (method) {
 		case 'createUser': {
@@ -68,4 +101,4 @@ const validate = (method) => {
 		}
 	}
 };
-export { create, validate, retrieve };
+export { create, validate, retrieve, retrieveById };
