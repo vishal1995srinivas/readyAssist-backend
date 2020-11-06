@@ -3,9 +3,9 @@ import logger from 'morgan';
 // import users from './routes/users';
 import { urlencoded } from 'body-parser';
 import cors from 'cors';
-import mongoose from './database.js'; //database configuration
+import mongoose from './config/database.js'; //database configuration
+import users from './routes/index.js';
 const app = express();
-
 app.use(logger('dev'));
 app.use(json());
 
@@ -20,9 +20,8 @@ app.get('/', function(req, res) {
 });
 
 // public route
-// app.use('/users', users);
-// private route
-//----------
+
+app.use('/users', users);
 app.use(function(req, res, next) {
 	let err = new Error('Not Found');
 	err.status = 404;
