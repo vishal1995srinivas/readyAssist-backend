@@ -41,7 +41,22 @@ const create = (req, res, next) => {
 		return next(err);
 	}
 };
-
+const retrieve = async (req, res, next) => {
+	let result = await userModel.find({}).limit(10);
+	if (result) {
+		res.json({
+			status: 'success',
+			message: 'Users retrieved successfully!!!',
+			data: result
+		});
+	} else {
+		res.json({
+			status: 'failure',
+			message: "Couldn't Retrieve the data . Something is wrong",
+			data: null
+		});
+	}
+};
 const validate = (method) => {
 	switch (method) {
 		case 'createUser': {
