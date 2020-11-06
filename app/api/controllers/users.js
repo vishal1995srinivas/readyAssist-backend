@@ -43,19 +43,39 @@ const create = (req, res, next) => {
 	}
 };
 const retrieve = async (req, res, next) => {
-	let result = await userModel.find({}).limit(10);
-	if (result) {
-		res.json({
-			status: 'success',
-			message: 'Users retrieved successfully!!!',
-			data: result
-		});
+	if (req.query.skip) {
+		console.log(req.query);
+		let skip = parseInt(req.query.skip);
+		let result = await userModel.find({}).skip(skip).limit(10);
+		console.log(result);
+		if (result) {
+			res.json({
+				status: 'success',
+				message: 'Users retrieved successfully!!!',
+				data: result
+			});
+		} else {
+			res.json({
+				status: 'failure',
+				message: "Couldn't Retrieve the data . Something is wrong",
+				data: null
+			});
+		}
 	} else {
-		res.json({
-			status: 'failure',
-			message: "Couldn't Retrieve the data . Something is wrong",
-			data: null
-		});
+		let result = await userModel.find({}).limit(10);
+		if (result) {
+			res.json({
+				status: 'success',
+				message: 'Users retrieved successfully!!!',
+				data: result
+			});
+		} else {
+			res.json({
+				status: 'failure',
+				message: "Couldn't Retrieve the data . Something is wrong",
+				data: null
+			});
+		}
 	}
 };
 const retrieveById = async (req, res, next) => {
