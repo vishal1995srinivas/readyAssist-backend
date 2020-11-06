@@ -21,7 +21,7 @@ app.get('/', function(req, res) {
 
 // public route
 
-app.use('/users', users);
+app.use('/v1/users', users);
 app.use(function(req, res, next) {
 	let err = new Error('Not Found');
 	err.status = 404;
