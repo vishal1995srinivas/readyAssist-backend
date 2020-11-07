@@ -52,17 +52,14 @@ const updateById = async (req, res, next) => {
 	let objectId = mongoose.Types.ObjectId(id);
 	let firstName = req.body.firstName;
 	let lastName = req.body.lastName;
-	let isActive = req.body.isActive;
 	let updatedAt = Date.now();
 	let updatedEntry = {
 		firstName,
 		lastName,
-		isActive,
 		updatedAt
 	};
 	try {
 		await userModel.findByIdAndUpdate(objectId, updatedEntry, function(err, userInfo) {
-			console.log(userInfo);
 			if (err) {
 				next(err);
 			} else {
@@ -164,7 +161,7 @@ const deleteById = async (req, res, next) => {
 	}
 	let id = req.body.id;
 	let objectId = mongoose.Types.ObjectId(id);
-	let isActive = req.body.isActive;
+	let isActive = false;
 	let updatedEntry = {
 		isActive
 	};
@@ -208,14 +205,13 @@ const validate = (method) => {
 		}
 		case 'updateUser': {
 			return [
-				body('isActive', ' No isActive field present').exists(),
 				body('id', 'No id found').exists(),
 				body('firstName', 'No firstName found').exists(),
 				body('lastName', 'No lastName Found').exists()
 			];
 		}
 		case 'deleteUser': {
-			return [ body('id', 'No id found').exists(), body('isActive', ' No isActive field present').exists() ];
+			return [ body('id', 'No id found').exists() ];
 		}
 	}
 };
