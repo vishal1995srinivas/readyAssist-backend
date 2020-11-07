@@ -1,10 +1,12 @@
-import express, { json } from 'express';
+import express from 'express';
 import logger from 'morgan';
 // import users from './routes/users';
-import { urlencoded } from 'body-parser';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from './config/database.js'; //database configuration
 import users from './routes/index.js';
+const { json } = express;
+const { urlencoded } = bodyParser;
 const app = express();
 app.use(logger('dev'));
 app.use(json());
