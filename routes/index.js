@@ -1,5 +1,7 @@
-import { Router } from 'express';
+import checkAPI from 'express';
+const { Router } = checkAPI;
 const router = Router();
+
 import { validate, create, retrieve, retrieveById, updateById, deleteById } from '../app/api/controllers/users.js';
 router.post('/register', validate('createUser'), create);
 router.get('/', retrieve);

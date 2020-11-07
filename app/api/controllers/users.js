@@ -1,8 +1,7 @@
 import userModel from '../models/users.js';
-import { body } from 'express-validator';
 import checkAPIs from 'express-validator';
 import mongoose from 'mongoose';
-const { validationResult } = checkAPIs;
+const { validationResult, body } = checkAPIs;
 const create = async (req, res, next) => {
 	try {
 		const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
